@@ -34,6 +34,30 @@ async def health():
     return {"status": "healthy", "service": "blaxel-agent", "version": "1.0.0"}
 
 
+@app.get("/api/sandbox/run")
+async def sandbox_run():
+    """Connect to Blaxel sandbox and run 2+2 inside it."""
+    import os
+    os.environ.setdefault("BL_WORKSPACE", settings.bl_workspace)
+    os.environ.setdefault("BL_API_KEY", settings.bl_api_key)
+
+    from blaxel.core import SandboxInstance
+
+    sandbox = await SandboxInstance.get(settings.sandbox_name)
+    result = await sandbox.process.exec({
+        "command": "python3 -c \"print(2+2)\"",
+        "wait_for_completion": True,
+        "timeout": 15000,
+    })
+    return {
+        "command": result.command,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "exit_code": result.exit_code,
+        "status": result.status,
+    }
+
+
 @app.post("/api/chat")
 async def chat(req: ChatRequest):
     runner = InMemoryRunner(agent=root_agent, app_name=settings.app_name)

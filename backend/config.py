@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     app_name: str = "blaxel-hello-world"
     cors_origins: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
+    # Blaxel sandbox
+    bl_workspace: str = ""
+    bl_api_key: str = ""
+    sandbox_name: str = "agent-env"
+
     @property
     def frontend_dir(self) -> Path:
         return Path(__file__).parent.parent / "frontend"
