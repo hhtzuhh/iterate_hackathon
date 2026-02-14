@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     bl_api_key: str = ""
     sandbox_name: str = "agent-env"
 
+    # SendGrid
+    sendgrid_api_key: str = ""
+
     @property
     def frontend_dir(self) -> Path:
         return Path(__file__).parent.parent / "frontend"
